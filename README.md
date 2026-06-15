@@ -1,186 +1,271 @@
-# FinWise AI
+<div align="center">
 
-AI-powered personal financial intelligence platform — full-stack portfolio project built with 100% free and open-source tools.
+# 💹 FinWise AI
 
-## Architecture
+### AI-powered personal finance platform — built with 100% free & open-source tools
+
+[![CI/CD](https://github.com/vishvsureja/finwise-ai/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/vishvsureja/finwise-ai/actions)
+![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?logo=fastapi&logoColor=white)
+![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green)
+
+Upload your bank statement CSV → get instant AI-driven insights, anomaly alerts, credit scoring, spend forecasting, and a conversational financial advisor — all running locally with no paid APIs.
+
+</div>
+
+---
+
+## ✨ Features
+
+| Feature | Description |
+|---|---|
+| 📊 **Smart Dashboard** | Income vs spend charts, category breakdown, monthly trend, savings rate |
+| 🔍 **Anomaly Detection** | Isolation Forest flags suspicious transactions with explanations |
+| 🎯 **Credit Score** | 300–900 score derived from 4 engineered financial features |
+| 🔮 **Spend Forecasting** | Linear regression predicts next month's spend from your history |
+| 🤖 **AI Advisor** | Chat with a local LLM grounded in your actual financial data |
+| 📈 **Inline Charts** | AI responses include live Recharts bar charts rendered in chat |
+| 💰 **Budget Alerts** | Per-category monthly limits with warning (80%) and danger (100%) alerts |
+| 📐 **50/30/20 Rule** | Needs / wants / savings breakdown vs target percentages |
+| 📄 **PDF Reports** | Downloadable financial summary with category and anomaly sections |
+| 🔐 **JWT Auth** | Secure register / login with bcrypt password hashing |
+| 📥 **CSV Export** | Export categorised transactions with anomaly risk scores |
+
+---
+
+## 🏗️ Architecture
 
 ```
-User (Browser)
-  ↓ HTTP
-React Frontend (Vite, port 5173)
-  ↓ Axios (JWT in header)
-FastAPI Backend (port 8000)
-  ↓ SQLAlchemy + pgvector
-Supabase PostgreSQL (cloud)
-  ↓ httpx (internal HTTP call)
-FastAPI ML Service (port 8001)
-  ↓ scikit-learn + LangChain
-Ollama (local LLM on Mac host, port 11434)
+Browser  (React 18 + Vite, port 5173)
+    │
+    │  Axios  +  JWT Bearer token
+    ▼
+FastAPI Backend  (port 8000)
+    │  SQLAlchemy ORM
+    ▼
+Supabase PostgreSQL  (cloud, pgvector extension)
+    │
+    │  httpx  internal calls
+    ▼
+FastAPI ML Service  (port 8001)
+    │  scikit-learn  +  LangChain
+    ▼
+Ollama  (llama3.2:3b — runs natively on your Mac, port 11434)
 ```
 
-## Tech Stack
+Three Docker containers — **backend**, **ml-service**, **frontend** — talk to a cloud Supabase database and a native Ollama process on your Mac host. No paid API keys required.
 
-| Layer | Tool |
-|-------|------|
-| Backend API | Python 3.11 + FastAPI + Uvicorn |
-| Database | Supabase PostgreSQL + pgvector |
-| ORM | SQLAlchemy + Alembic |
-| Auth | python-jose + passlib bcrypt |
-| ML | scikit-learn (IsolationForest, LogisticRegression, MultinomialNB) |
-| LLM | Ollama (llama3.2:3b) — local, no API key |
-| Embeddings | Ollama (nomic-embed-text) — local vector model |
-| LLM Orchestration | LangChain + langchain-ollama |
-| Frontend | React 18 + Vite + Tailwind CSS |
-| Charts | Recharts (dashboard + agentic UI chat) |
-| DevOps | Docker + Docker Compose + GitHub Actions |
+---
 
-## Supabase Prerequisites
+## 🛠️ Tech Stack
 
-Before running the app, set up your Supabase project:
+| Layer | Tools |
+|---|---|
+| **Frontend** | React 18, Vite, Tailwind CSS, Recharts, React Router v6 |
+| **Backend API** | Python 3.11, FastAPI, SQLAlchemy 2, Alembic, slowapi |
+| **Auth** | python-jose (JWT), passlib (bcrypt) |
+| **Database** | Supabase PostgreSQL + pgvector (768-dim embeddings) |
+| **ML Models** | scikit-learn — IsolationForest, MultinomialNB + TF-IDF, LogisticRegression, LinearRegression |
+| **LLM** | Ollama + llama3.2:3b (local, Metal-accelerated on Apple Silicon) |
+| **LLM Orchestration** | LangChain + langchain-ollama |
+| **DevOps** | Docker Compose, GitHub Actions CI |
 
-1. Create a free project at [supabase.com](https://supabase.com).
-2. Go to **Project Settings → Database** and copy your connection string (URI format).
-3. Open the **SQL Editor** and run:
+---
 
-```sql
-CREATE EXTENSION IF NOT EXISTS vector;
-```
+## 📸 Screenshots
 
-4. Paste your connection string into `.env`:
+> Dashboard — real-time income, spend, savings rate and anomaly cards
 
-```env
-DATABASE_URL=postgresql://postgres:[YOUR-PASSWORD]@[YOUR-SUPABASE-DB-URL]:5432/postgres
-```
+> AI Advisor — conversational chat with inline bar charts rendered from LLM JSON
 
-Replace `[YOUR-PASSWORD]` and `[YOUR-SUPABASE-DB-URL]` with your actual Supabase credentials.
+> Transactions — paginated table with anomaly expand, category editor, CSV export
 
-## Hardware Acceleration (Mac)
+> Budgets — per-category progress bars with warning / danger alerts
 
-For the best local LLM performance on Apple Silicon, run **Ollama natively on your Mac host** — not inside a Docker container. Ollama automatically uses Apple Metal Performance Shaders (MPS) for GPU acceleration when installed on macOS.
+---
 
-The ML service container connects to your host Ollama via `host.docker.internal:11434`, so inference runs on Metal while the rest of the stack stays containerized.
+## 🚀 Quick Start
+
+### Prerequisites
+
+- [Docker Desktop](https://docker.com)
+- [Ollama](https://ollama.com) — install the native Mac app (uses Apple Metal for GPU)
+- [Supabase](https://supabase.com) — free account (500 MB, no credit card)
+
+### 1 — Start Ollama
 
 ```bash
-# Install Ollama from https://ollama.com (native Mac app)
 ollama pull llama3.2:3b
-ollama pull nomic-embed-text
 ollama serve
 ```
 
-`nomic-embed-text` is the local embedding model used with pgvector for semantic search (768-dimensional vectors).
+Ollama runs on your Mac host at `http://localhost:11434`. The ML service container reaches it via `host.docker.internal`.
 
-## Prerequisites
+### 2 — Set up Supabase
 
-1. [Python 3.11](https://python.org)
-2. [Node.js 20](https://nodejs.org)
-3. [Docker Desktop](https://docker.com)
-4. [Ollama](https://ollama.com) — installed natively on Mac for Metal GPU
-5. [Supabase](https://supabase.com) — free cloud PostgreSQL with pgvector
+1. Create a free project at [supabase.com](https://supabase.com)
+2. Go to **SQL Editor** and run:
+   ```sql
+   CREATE EXTENSION IF NOT EXISTS vector;
+   ```
+3. Copy your **Database → Connection string (URI)** from Project Settings
 
-## Quick Start
-
-### 1. Install and start Ollama (before Docker)
-
-```bash
-ollama pull llama3.2:3b
-ollama pull nomic-embed-text
-ollama serve
-```
-
-### 2. Configure Supabase and environment
+### 3 — Configure environment
 
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env`:
-- Set `DATABASE_URL` to your Supabase connection string
-- Change `SECRET_KEY` to a random string
+Open `.env` and fill in:
 
-Run the pgvector extension in Supabase SQL Editor (see **Supabase Prerequisites** above).
+```env
+DATABASE_URL=postgresql://postgres:[PASSWORD]@[YOUR-SUPABASE-HOST]:5432/postgres
+SECRET_KEY=your-random-secret-key-here
+```
 
-### 3. Build and start services
+### 4 — Build and start
 
 ```bash
 docker compose up --build
 ```
 
-First build takes 5–10 minutes. Three containers start: backend, ml-service, and frontend. The database runs on Supabase — no local Postgres container.
+First build takes 5–10 minutes (installs Python deps and trains ML models). After that, start-up is under 10 seconds.
 
-### 4. Run database migrations (first time only)
+### 5 — Run database migrations
 
 ```bash
 docker compose exec backend alembic upgrade head
 ```
 
-### 5. Open the app
+Only needed the first time.
+
+### 6 — Open the app
 
 | Service | URL |
-|---------|-----|
-| Frontend | http://localhost:5173 |
-| Backend API docs | http://localhost:8000/docs |
-| ML service docs | http://localhost:8001/docs |
+|---|---|
+| 🌐 Frontend | http://localhost:5173 |
+| 📖 Backend API docs | http://localhost:8000/docs |
+| 🤖 ML Service docs | http://localhost:8001/docs |
 
-## Demo Flow
+---
+
+## 🧪 Demo
 
 1. Register a new account at `/register`
-2. Sign in at `/login`
-3. Upload `sample.csv` from the project root
-4. Explore Dashboard, Transactions, Budgets, Credit Score, and AI Advisor
-5. Ask the AI Advisor for category breakdowns — responses include inline Recharts bar charts (agentic UI)
+2. Go to **Upload Data** and upload the built-in sample CSV (click *Download sample CSV*)
+3. Explore the **Dashboard** — income/spend charts, budget alerts, and the 50/30/20 widget
+4. Open **Transactions** — a ₹45,000 midnight transfer and a duplicate charge will be flagged as anomalies
+5. Check **Credit Score** for a 300–900 rating with a grade breakdown
+6. Set budget limits in **Budgets** and watch the progress bars fill
+7. Ask the **AI Advisor** anything — *"Where am I overspending?"* or *"Can I afford a ₹8,000 EMI?"*
 
-The sample CSV includes a ₹45,000 midnight transfer and a duplicate Amazon charge that should be flagged as anomalies.
+---
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 finwise-ai/
-├── backend/           → FastAPI main API (port 8000)
-├── ml-service/        → ML + AI microservice (port 8001)
-├── frontend/          → React + Vite UI (port 5173)
-├── .github/workflows/ → CI/CD pipeline
+│
+├── backend/                    # FastAPI main API (port 8000)
+│   ├── app/
+│   │   ├── main.py             # App entry point + lifespan
+│   │   ├── models.py           # SQLAlchemy ORM models
+│   │   ├── schemas.py          # Pydantic request/response schemas
+│   │   ├── utils.py            # Shared helpers (month key utilities)
+│   │   ├── limiter.py          # Rate limiter (slowapi)
+│   │   └── routes/
+│   │       ├── auth.py         # Register, login, /me
+│   │       ├── transactions.py # Upload CSV, paginate, export
+│   │       ├── analysis.py     # Summary, trend, forecast, chat
+│   │       ├── budgets.py      # Budget CRUD + alerts
+│   │       └── reports.py      # PDF report generation
+│   └── alembic/                # Database migrations
+│
+├── ml-service/                 # ML + AI microservice (port 8001)
+│   └── app/
+│       ├── routes/
+│       │   ├── classify.py     # TF-IDF + NaiveBayes category classifier
+│       │   ├── anomaly.py      # Isolation Forest anomaly detector
+│       │   ├── credit.py       # Logistic regression credit scorer
+│       │   ├── forecast.py     # Linear regression spend forecaster
+│       │   └── chat.py         # LangChain + Ollama AI advisor
+│       └── ml/
+│           └── train.py        # Model training script (runs at startup)
+│
+├── frontend/                   # React + Vite UI (port 5173)
+│   └── src/
+│       ├── pages/              # Dashboard, Transactions, Budgets, etc.
+│       ├── components/         # Sidebar, StatCard, BudgetAlerts, etc.
+│       └── context/            # AuthContext (JWT management)
+│
+├── .github/workflows/
+│   └── ci-cd.yml               # GitHub Actions CI
 ├── docker-compose.yml
-├── sample.csv
-└── .env
+└── .env.example
 ```
 
-## Features
+---
 
-- **JWT Authentication** — register, login, protected routes
-- **Supabase + pgvector** — cloud PostgreSQL with vector embeddings column for semantic search
-- **CSV Upload** — parse bank statements, classify transactions
-- **Transactions Workspace** — search, filter anomalies, edit categories, paginate, and export CSV
-- **Anomaly Detection** — Isolation Forest flags suspicious transactions
-- **Credit Score** — logistic regression on engineered financial features (300–900 scale)
-- **Forecasting** — linear regression predicts next-month spend and income from monthly history
-- **Agentic UI** — AI chat returns structured JSON with text answers and inline Recharts charts
-- **AI Advisor** — Ollama LLM with financial context injection (simplified RAG)
-- **Dashboard** — total income/spend cards, category breakdown, monthly income/spend trend, forecast, recent transactions
-- **Budgets** — category limits, latest-month progress, and warning/danger alerts at 80% and 100%
-- **50/30/20 Rule** — latest-month needs/wants/savings comparison against target percentages
-- **PDF Reports** — downloadable financial summary with category and anomaly sections
-- **CI/CD** — GitHub Actions validates backend on every push to `main`
+## 🔬 ML Models
 
-## CI/CD
+All models are trained on startup from `ml-service/app/ml/train.py` using synthetic data — no dataset downloads required.
 
-The workflow at `.github/workflows/ci-cd.yml` runs on every push to `main`:
+| Model | Algorithm | Purpose |
+|---|---|---|
+| **Classifier** | TF-IDF + MultinomialNaiveBayes | Categorise transactions into 10 classes |
+| **Anomaly Detector** | Isolation Forest | Flag unusual transactions by amount, hour, day |
+| **Credit Scorer** | LogisticRegression | Score 300–900 from income stability, DTI, savings, spend discipline |
+| **Forecaster** | LinearRegression | Predict next month's income and spend |
 
-- Spins up an `ubuntu-latest` runner
-- Installs Python 3.11 and backend dependencies
-- Verifies `from app.main import app` succeeds without errors
+---
 
-Zero cost — uses GitHub Actions free tier for public repos.
+## ⚙️ CI/CD
 
-## Interview Talking Points
+GitHub Actions runs on every push to `main` and every pull request:
 
-- Microservices architecture — ML workload isolated in a separate FastAPI service
-- Supabase + pgvector — cloud database with native vector search for semantic transaction retrieval
-- Agentic UI — LLM returns structured JSON; frontend dynamically renders charts in chat
-- Anomaly detection with Isolation Forest mirrors fraud signal products
-- Local LLM via Ollama on Apple Metal — zero API cost, context-grounded answers
-- Docker deployment with external Supabase — no local database container to manage
-- Credit score from four engineered features: income stability, DTI ratio, savings rate, spend discipline
+- Spins up a `postgres:15` service container
+- Installs Python 3.11 and all backend dependencies
+- Verifies the FastAPI app imports and initialises without errors
 
-## License
+Zero cost — runs on GitHub's free tier.
 
-Open source — built for portfolio and learning purposes.
+---
+
+## 🔒 Security Notes
+
+- Passwords hashed with **bcrypt** (passlib)
+- JWT tokens expire after **24 hours**
+- Password minimum **8 characters** enforced client and server side
+- Chat endpoint **rate-limited** to 10 requests/minute (slowapi)
+- ML service CORS **locked to backend origin** only
+- `.env` excluded from git — use `.env.example` as a template
+
+---
+
+## 🙋 FAQ
+
+**Does this use ChatGPT or any paid API?**
+No. Everything runs locally. The LLM is `llama3.2:3b` via Ollama on your Mac.
+
+**Does it work on non-Mac / no Apple Silicon?**
+Yes. Ollama runs on Linux and Windows too. GPU acceleration on NVIDIA uses CUDA automatically. On CPU it's slower but works.
+
+**What CSV format is required?**
+Three columns: `date`, `description`, `amount`. Positive amounts = credit (income), negative = debit (spend). Click *Download sample CSV* on the Upload page for an example.
+
+**Can I use a local PostgreSQL instead of Supabase?**
+Yes — just point `DATABASE_URL` to your local Postgres instance and run `CREATE EXTENSION IF NOT EXISTS vector;` manually.
+
+---
+
+## 📄 License
+
+MIT — free to use, modify, and distribute.
+
+---
+
+<div align="center">
+Built with ❤️ using FastAPI · React · scikit-learn · Ollama · Supabase
+</div>
