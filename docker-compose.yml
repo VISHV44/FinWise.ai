@@ -1,0 +1,48 @@
+services:
+
+  backend:
+    build: ./backend
+    container_name: finwise-backend
+    restart: always
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./backend:/app
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      ML_SERVICE_URL: http://ml-service:8001
+
+  ml-service:
+    build: ./ml-service
+    container_name: finwise-ml
+    restart: always
+    ports:
+      - "8001:8001"
+    env_file:
+      - .env
+    volumes:
+      - ./ml-service:/app
+      # Named volume so trained model .pkl files survive image rebuilds
+      - ml_models:/app/app/models
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+      OLLAMA_MODEL: llama3.2:3b
+
+  frontend:
+    build: ./frontend
+    container_name: finwise-frontend
+    restart: always
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      VITE_API_URL: http://localhost:8000
+
+volumes:
+  ml_models:

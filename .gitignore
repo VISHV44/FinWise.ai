@@ -1,0 +1,72 @@
+# ── Secrets & environment ────────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+# Keep .env.example files — they are safe templates with no real values
+
+# ── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+coverage.xml
+venv/
+.venv/
+env/
+pip-wheel-metadata/
+
+# ── ML model binaries (trained at runtime, not source code) ──────────────────
+*.pkl
+*.joblib
+*.h5
+*.pt
+*.pth
+*.onnx
+# Keep the .gitkeep so the models/ directory exists in the repo
+!ml-service/app/models/.gitkeep
+
+# ── Node / Frontend ──────────────────────────────────────────────────────────
+node_modules/
+frontend/dist/
+frontend/.vite/
+*.tsbuildinfo
+
+# ── OS & editor ──────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ── Docker ───────────────────────────────────────────────────────────────────
+# Docker named volumes are managed by Docker, not git
+# No local files to exclude here
+
+# ── Logs ─────────────────────────────────────────────────────────────────────
+*.log
+logs/
+*.out
+
+# ── Alembic ──────────────────────────────────────────────────────────────────
+# Keep all migration files — they are source code
+
+# ── Misc ─────────────────────────────────────────────────────────────────────
+*.bak
+*.tmp
+.cache/
