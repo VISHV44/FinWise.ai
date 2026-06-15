@@ -1,14 +1,21 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from app.database import Base, engine
 from app.routes import auth, transactions, analysis, budgets, reports
 from app.limiter import limiter
 
-Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="FinWise AI Backend", version="1.0.0")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Run DB migrations/table creation at startup, not at import time
+    Base.metadata.create_all(bind=engine)
+    yield
+
+
+app = FastAPI(title="FinWise AI Backend", version="1.0.0", lifespan=lifespan)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
