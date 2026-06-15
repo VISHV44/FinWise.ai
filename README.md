@@ -76,13 +76,22 @@ Three Docker containers — **backend**, **ml-service**, **frontend** — talk t
 
 ## 📸 Screenshots
 
-> Dashboard — real-time income, spend, savings rate and anomaly cards
+### Dashboard
+![Dashboard Overview](assets/dashboard-1.png)
 
-> AI Advisor — conversational chat with inline bar charts rendered from LLM JSON
+![Dashboard Charts & Transactions](assets/dashboard-2.png)
 
-> Transactions — paginated table with anomaly expand, category editor, CSV export
+### AI Advisor
+![AI Chat with inline charts](assets/ai-chat.png)
 
-> Budgets — per-category progress bars with warning / danger alerts
+### Transactions
+![Transactions table with anomaly detection](assets/transactions.png)
+
+### Budgets
+![Budget limits and alerts](assets/budgets.png)
+
+### Credit Score
+![Credit score breakdown](assets/credit-score.png)
 
 ---
 
