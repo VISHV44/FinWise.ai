@@ -92,7 +92,7 @@ Three Docker containers — **backend**, **ml-service**, **frontend** — talk t
 
 - [Docker Desktop](https://docker.com)
 - [Ollama](https://ollama.com) — install the native Mac app (uses Apple Metal for GPU)
-- [Supabase](https://supabase.com) — free account (500 MB, no credit card)
+- [Supabase](https://supabase.com) 
 
 ### 1 — Start Ollama
 
